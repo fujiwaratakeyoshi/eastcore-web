@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import { emailAddress } from "../data/company";
+import { products } from "../data/products";
+
+const description =
+  "株式会社イーストコアの製品カタログ・資料請求。水蒸気吸着測定装置・フリーズドライ顕微鏡などの詳細資料をご希望の方は、こちらからご請求ください。";
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || "";
+---
+
+<BaseLayout title="資料ダウンロード（資料請求）" description={description} noindex={!endpoint}>
+  <Breadcrumb items={[{ label: "資料ダウンロード" }]} />
+
+  <section class="section">
+    <div class="container dl">
+      <div class="dl__intro">
+        <span class="eyebrow">Download</span>
+        <h2>資料ダウンロード（資料請求）</h2>
+        <p>
+          製品カタログ・技術資料をご希望の方は、下記フォームよりご請求ください。ご入力いただいたメールアドレス宛に資料をお送りします。
+        </p>
+        <ul class="checklist">
+          <li>製品カタログ（仕様・測定例つき）</li>
+          <li>測定原理・アプリケーション資料</li>
+          <li>導入のご相談・お見積りのご案内</li>
+        </ul>
+      </div>
+
+      <div class="dl__formwrap">
+        {
+          !endpoint && (
+            <p class="setup-note">
+              ⚠️ フォーム送信先が未設定です。<code>.env</code> に
+              <code>PUBLIC_FORM_ENDPOINT</code> を設定すると有効になります。設定までは
+              <a href={`mailto:${emailAddress}`}>{emailAddress}</a> 宛にご連絡ください。
+            </p>
+          )
+        }
+        <form class="form" method="POST" action={endpoint || `mailto:${emailAddress}`}>
+          <input type="hidden" name="_subject" value="資料請求" />
+          <input
+            type="text"
+            name="_gotcha"
+            tabindex="-1"
+            autocomplete="off"
+            class="visually-hidden"
+            aria-hidden="true"
+          />
+          <div class="form__row">
+            <label>会社名・機関名 <span class="req">必須</span>
+              <input type="text" name="company" required />
+            </label>
+            <label>お名前 <span class="req">必須</span>
+              <input type="text" name="name" required />
+            </label>
+          </div>
+          <label>メールアドレス <span class="req">必須</span>
+            <input type="email" name="email" required />
+          </label>
+          <label>ご希望の資料
+            <select name="material">
+              <option value="">選択してください</option>
+              {products.map((p) => <option value={p.model}>{p.name}</option>)}
+              <option value="全製品">全製品の資料</option>
+            </select>
+          </label>
+          <label>ご質問・ご要望（任意）
+            <textarea name="message" rows="4"></textarea>
+          </label>
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            <a href="/privacy/" target="_blank">プライバシーポリシー</a>に同意します
+          </label>
+          <button type="submit" class="btn btn--primary btn--lg">資料を請求する</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .dl {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .dl__intro p {
+    color: var(--ink-soft);
+  }
+  .setup-note {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+  .setup-note code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .form {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+  }
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .form label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--navy);
+    margin-bottom: 18px;
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+  }
+  .form input:focus,
+  .form select:focus,
+  .form textarea:focus {
+    outline: 2px solid var(--turquoise);
+    border-color: var(--turquoise);
+  }
+  .req {
+    background: var(--turquoise-deep);
+    color: #fff;
+    font-size: 0.66rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .consent {
+    font-weight: 400 !important;
+    font-size: 0.85rem !important;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+  }
+  .consent input {
+    width: auto;
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .dl {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+  @media (max-width: 560px) {
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

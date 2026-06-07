@@ -1,0 +1,76 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { company } from "../data/company";
+
+interface Props {
+  title: string; // ページ固有タイトル（サイト名は自動付与）
+  description: string;
+  /** OGP用の絶対/相対画像パス */
+  ogImage?: string;
+  /** 構造化データ(JSON-LD)の配列 */
+  jsonLd?: Record<string, unknown>[];
+  /** 公開前は true で検索エンジンにインデックスさせない */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogImage = "/ogp.png",
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const siteName = company.name;
+const fullTitle = title ? `${title} | ${siteName}` : siteName;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
+
+// 公開前は環境変数 PUBLIC_NOINDEX=1 でサイト全体をnoindexにできる
+const globalNoindex = import.meta.env.PUBLIC_NOINDEX === "1";
+const blockIndex = noindex || globalNoindex;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {blockIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- OGP / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0e7d74" />
+
+    {
+      jsonLd.map((data) => (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(data)}
+        />
+      ))
+    }
+  </head>
+  <body>
+    <a href="#main" class="visually-hidden">本文へスキップ</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

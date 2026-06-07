@@ -1,0 +1,145 @@
+---
+import { company, emailAddress, nav } from "../data/company";
+import { products } from "../data/products";
+const year = 2026;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__top">
+    <div class="site-footer__brand">
+      <div class="brand__mark" aria-hidden="true">EC</div>
+      <p class="site-footer__name">{company.name}</p>
+      <p class="site-footer__addr">
+        {company.zip}<br />
+        {company.address}<br />
+        TEL: <a href={`tel:${company.tel.replace(/-/g, "")}`}>{company.tel}</a> / FAX: {company.fax}<br />
+        営業時間: {company.businessHours}
+      </p>
+    </div>
+
+    <nav class="site-footer__col" aria-label="製品">
+      <h3>製品情報</h3>
+      <ul>
+        {products.map((p) => (
+          <li><a href={`/products/${p.slug}/`}>{p.model}</a></li>
+        ))}
+        <li><a href="/products/">製品一覧</a></li>
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="会社情報">
+      <h3>会社情報</h3>
+      <ul>
+        {nav.map((n) => (
+          <li><a href={n.href}>{n.label}</a></li>
+        ))}
+        <li><a href="/privacy/">プライバシーポリシー</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__cta">
+      <h3>お問い合わせ</h3>
+      <p>製品のご相談・デモ・お見積りはお気軽に。</p>
+      <a href={`mailto:${emailAddress}`}>{emailAddress}</a>
+      <div class="site-footer__btns">
+        <a href="/contact/" class="btn btn--accent">お問い合わせ</a>
+        <a href="/download/" class="btn btn--white">資料ダウンロード</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="container">
+      <small>© {year} {company.name} All Rights Reserved.</small>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy);
+    color: rgba(255, 255, 255, 0.82);
+    margin-top: 0;
+  }
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    padding-block: 64px 48px;
+  }
+  .site-footer h3 {
+    color: #fff;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+  .site-footer .brand__mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--turquoise), var(--turquoise-deep));
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+  .site-footer__name {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .site-footer__addr {
+    font-size: 0.85rem;
+    line-height: 1.9;
+    margin: 0;
+  }
+  .site-footer__col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-footer__col li {
+    margin-bottom: 10px;
+  }
+  .site-footer a {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.88rem;
+  }
+  .site-footer a:hover {
+    color: var(--turquoise);
+  }
+  .site-footer__cta p {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  .site-footer__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .site-footer__btns .btn {
+    padding: 11px 18px;
+    font-size: 0.9rem;
+  }
+  .site-footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-block: 20px;
+  }
+  .site-footer__bottom small {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  @media (max-width: 860px) {
+    .site-footer__top {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+  }
+  @media (max-width: 520px) {
+    .site-footer__top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

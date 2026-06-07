@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { clients } from "../data/company";
+
+const description =
+  "株式会社イーストコアの導入実績。アステラス製薬、エーザイ、大塚製薬、塩野義製薬、第一三共、武田薬品工業、中外製薬など、国内大手製薬企業の研究開発現場で採用されています。";
+
+const fields = [
+  {
+    title: "医薬品（製剤・原薬）開発",
+    body: "原薬の吸湿性評価、凍結乾燥製剤の崩壊温度測定、安定性評価など、製剤設計の各工程で活用されています。",
+  },
+  {
+    title: "化学・材料研究",
+    body: "粉体・繊維・フィルムなどの表面物性評価、水分吸着挙動の解析に。",
+  },
+  {
+    title: "食品・化粧品",
+    body: "粉体原料の吸湿性・潮解性の評価、品質管理のための水分挙動測定に。",
+  },
+];
+---
+
+<BaseLayout title="導入実績" description={description}>
+  <Breadcrumb items={[{ label: "導入実績" }]} />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Track Record</span>
+        <h2>導入実績</h2>
+        <p>
+          創業以来、国内大手製薬企業をはじめとする研究開発の現場に、確かな測定をお届けしてきました。
+        </p>
+      </div>
+
+      <ul class="clients">
+        {clients.map((c) => <li>{c}</li>)}
+        <li class="clients__more">ほか 研究機関・企業</li>
+      </ul>
+      <p class="caption">※ 五十音・順不同。掲載は主な導入先の一部です。</p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Use Cases</span>
+        <h2>活用されている分野</h2>
+      </div>
+      <div class="grid grid--3">
+        {
+          fields.map((f) => (
+            <div class="card">
+              <h3>{f.title}</h3>
+              <p>{f.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    heading="貴社の研究テーマでも、まずはご相談ください"
+    text="測定対象や評価したい項目をお聞かせいただければ、適した装置・測定方法をご提案します。"
+  />
+</BaseLayout>
+
+<style>
+  .clients {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 920px;
+  }
+  .clients li {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 16px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--navy);
+    box-shadow: var(--shadow);
+  }
+  .clients__more {
+    color: var(--ink-soft) !important;
+    font-weight: 600 !important;
+  }
+  .caption {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    margin-top: 18px;
+  }
+  .card h3 {
+    font-size: 1.1rem;
+  }
+  .card p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0;
+  }
+  @media (max-width: 760px) {
+    .clients {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

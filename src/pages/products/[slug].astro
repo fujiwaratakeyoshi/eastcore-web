@@ -1,0 +1,299 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import { products } from "../../data/products";
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const description = `${product.name}（${product.model}）。${product.short}`;
+
+// 関連製品（自分以外を最大2件）
+const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);
+
+// 構造化データ：製品 + FAQ
+const productJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  sku: product.model,
+  category: product.category,
+  description: product.short,
+  brand: { "@type": "Brand", name: "EastCore" },
+  manufacturer: { "@type": "Organization", name: "株式会社イーストコア" },
+};
+const faqJsonLd =
+  product.faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: product.faq.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
+
+const jsonLd = faqJsonLd ? [productJsonLd, faqJsonLd] : [productJsonLd];
+---
+
+<BaseLayout title={product.name} description={description} jsonLd={jsonLd}>
+  <Breadcrumb
+    items={[{ label: "製品情報", href: "/products/" }, { label: product.model }]}
+  />
+
+  <article>
+    <!-- 製品ヘッダー -->
+    <section class="prod-hero">
+      <div class="container prod-hero__inner">
+        <div class="prod-hero__copy">
+          <span class="badge">{product.category}</span>
+          <h1>{product.name}</h1>
+          <p class="prod-hero__lead">{product.lead}</p>
+          <div class="prod-hero__btns">
+            <a href="/contact/" class="btn btn--primary">この製品について問い合わせる</a>
+            <a href="/download/" class="btn btn--ghost">資料をダウンロード</a>
+          </div>
+        </div>
+        <aside class={`prod-hero__visual ${product.image ? "has-img" : ""}`}>
+          {
+            product.image ? (
+              <img
+                src={product.image}
+                alt={product.imageAlt ?? product.name}
+                width="640"
+                height="480"
+              />
+            ) : (
+              <div class="prod-hero__model" aria-hidden="true">
+                {product.model}
+              </div>
+            )
+          }
+        </aside>
+      </div>
+    </section>
+
+    <div class="container prod-body">
+      <!-- 用途・解決できる課題 -->
+      <section class="prod-section">
+        <h2>用途・解決できる課題</h2>
+        <ul class="checklist">
+          {product.applications.map((a) => <li>{a}</li>)}
+        </ul>
+      </section>
+
+      <!-- 主な特長 -->
+      <section class="prod-section">
+        <h2>主な特長</h2>
+        <ul class="checklist">
+          {product.features.map((f) => <li>{f}</li>)}
+        </ul>
+      </section>
+
+      <!-- 主な仕様 -->
+      <section class="prod-section">
+        <h2>主な仕様</h2>
+        <table class="spec-table">
+          <tbody>
+            {
+              product.specs.map((s) => (
+                <tr>
+                  <th>{s.label}</th>
+                  <td>{s.value}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p class="note">
+          ※ 詳細な測定範囲・精度・寸法などの仕様は、製品カタログまたはお問い合わせにてご確認ください。
+        </p>
+      </section>
+
+      <!-- FAQ -->
+      {
+        product.faq.length > 0 && (
+          <section class="prod-section">
+            <h2>よくあるご質問</h2>
+            <div class="faq">
+              {product.faq.map((f) => (
+                <details>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- キーワード（内部リンク的補強） -->
+      <section class="prod-section">
+        <h2>関連キーワード</h2>
+        <ul class="keywords">
+          {product.keywords.map((k) => <li>{k}</li>)}
+        </ul>
+      </section>
+
+      <!-- 関連製品 -->
+      <section class="prod-section">
+        <h2>関連製品</h2>
+        <div class="grid grid--3">
+          {
+            related.map((p) => (
+              <a href={`/products/${p.slug}/`} class="card relcard">
+                <span class="badge">{p.category}</span>
+                <h3>{p.model}</h3>
+                <p>{p.short}</p>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <CtaBand
+    heading={`${product.model} のご相談・デモのご依頼`}
+    text="測定対象やご要望をお聞かせください。サンプルに合わせた測定方法・条件をご提案します。"
+  />
+</BaseLayout>
+
+<style>
+  .prod-hero {
+    background: linear-gradient(160deg, #f4f8f9, #ecf8f6);
+    padding-block: 56px;
+  }
+  .prod-hero__inner {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .prod-hero h1 {
+    font-size: clamp(1.6rem, 3.6vw, 2.3rem);
+    margin: 14px 0 18px;
+  }
+  .prod-hero__lead {
+    color: var(--ink-soft);
+    margin-bottom: 26px;
+  }
+  .prod-hero__btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .prod-hero__visual {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--turquoise), var(--turquoise-deep));
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .prod-hero__visual.has-img {
+    background: #fff;
+    border: 1px solid var(--line);
+  }
+  .prod-hero__visual.has-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 20px;
+  }
+  .prod-hero__model {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .prod-body {
+    padding-block: 56px;
+    max-width: 880px;
+  }
+  .prod-section {
+    margin-bottom: 48px;
+  }
+  .prod-section h2 {
+    font-size: 1.35rem;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--turquoise);
+    margin-bottom: 22px;
+  }
+  .note {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .faq details {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 4px 18px;
+    margin-bottom: 12px;
+    background: #fff;
+  }
+  .faq summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy);
+    padding: 14px 0;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary::before {
+    content: "Q ";
+    color: var(--turquoise-deep);
+    font-weight: 800;
+  }
+  .faq p {
+    margin: 0 0 14px;
+    color: var(--ink-soft);
+  }
+
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .keywords li {
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .relcard {
+    color: var(--ink);
+  }
+  .relcard h3 {
+    font-size: 1.05rem;
+    margin: 12px 0 8px;
+  }
+  .relcard p {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    margin: 0;
+  }
+
+  @media (max-width: 760px) {
+    .prod-hero__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

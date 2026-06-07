@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import { products } from "../../data/products";
+
+const description =
+  "株式会社イーストコアの製品一覧。水蒸気吸着測定装置 E-301、フリーズドライ顕微鏡 FD301、小型造粒装置 SGL-101、温湿度コントロール顕微鏡ステージ GRHシリーズ、インバースガスクロマトグラフィー（IGC）をご紹介します。";
+---
+
+<BaseLayout title="製品情報" description={description}>
+  <Breadcrumb items={[{ label: "製品情報" }]} />
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Products</span>
+        <h2>製品情報</h2>
+        <p>
+          表面物性分析・フリーズドライ測定・造粒まで、医薬・化学分野の研究開発を支える測定機器を取り揃えています。
+        </p>
+      </div>
+      <div class="grid grid--3">
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>

@@ -1,0 +1,315 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { company, clients } from "../data/company";
+import { products } from "../data/products";
+
+const description =
+  "株式会社イーストコアは、水蒸気吸着測定装置・フリーズドライ顕微鏡などの科学測定機器メーカー。原薬の吸湿性評価、凍結乾燥の崩壊温度測定、粉体の表面物性分析を、大手製薬企業をはじめとする研究開発現場でサポートします。";
+
+// 構造化データ（組織情報）
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: company.name,
+  url: "https://eastcore.jp/",
+  email: `${company.emailUser}@${company.emailDomain}`,
+  telephone: company.tel,
+  foundingDate: "2003-05-13",
+  address: {
+    "@type": "PostalAddress",
+    postalCode: "108-0074",
+    addressRegion: "東京都",
+    addressLocality: "港区",
+    streetAddress: "高輪4-20-10",
+    addressCountry: "JP",
+  },
+  description: company.description,
+};
+
+const challenges = [
+  {
+    title: "水分・吸湿性を評価したい",
+    body: "原薬・製剤の吸湿性、平衡水分含有量と相対湿度の関係（吸着等温線）を高精度に測定。",
+    href: "/products/e301/",
+    link: "水蒸気吸着測定装置 E-301",
+  },
+  {
+    title: "凍結乾燥の条件を最適化したい",
+    body: "崩壊温度（Tc）・共晶溶解温度（Teu）を微量サンプルで測定し、凍結乾燥サイクルを最適化。",
+    href: "/products/fd301/",
+    link: "フリーズドライ顕微鏡 FD301",
+  },
+  {
+    title: "粉体の表面物性を知りたい",
+    body: "表面自由エネルギーや吸着特性を評価し、分散性・安定性・ロット間差の解析を支援。",
+    href: "/products/igc/",
+    link: "インバースガスクロマトグラフィー",
+  },
+];
+---
+
+<BaseLayout title="" description={description} jsonLd={[orgJsonLd]}>
+  <!-- ヒーロー -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="hero__eyebrow">医薬・化学分野の研究開発をささえる測定機器</p>
+        <h1>
+          粉体・固体の<span class="hl">表面物性分析</span>と、<br />
+          世界でも数少ない<span class="hl">フリーズドライ測定</span>を。
+        </h1>
+        <p class="hero__lead">
+          水蒸気吸着測定装置・フリーズドライ顕微鏡をはじめとする科学測定機器のメーカー。原薬の吸湿性評価、凍結乾燥の崩壊温度測定、粉体の表面物性分析まで、研究開発現場の課題解決をサポートします。
+        </p>
+        <div class="hero__btns">
+          <a href="/products/" class="btn btn--primary btn--lg">製品を見る</a>
+          <a href="/download/" class="btn btn--ghost btn--lg">資料ダウンロード</a>
+        </div>
+      </div>
+      <div class="hero__panel" aria-hidden="true">
+        <div class="hero__chip hero__chip--1">水蒸気吸着 / 吸着等温線</div>
+        <div class="hero__chip hero__chip--2">凍結乾燥 / 崩壊温度 Tc</div>
+        <div class="hero__chip hero__chip--3">表面自由エネルギー</div>
+        <div class="hero__panelmark">EC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 信頼の帯（導入実績） -->
+  <section class="trust">
+    <div class="container">
+      <p class="trust__label">国内大手製薬企業をはじめ、研究機関に導入いただいています</p>
+      <ul class="trust__logos">
+        {clients.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 課題から探す -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Solutions</span>
+        <h2>こんな課題を解決します</h2>
+        <p>研究開発の現場で直面する測定・評価の課題から、最適な装置をお選びいただけます。</p>
+      </div>
+      <div class="grid grid--3">
+        {
+          challenges.map((c) => (
+            <div class="card challenge">
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+              <a href={c.href} class="challenge__link">
+                {c.link} →
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 製品一覧 -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Products</span>
+        <h2>製品ラインナップ</h2>
+        <p>表面物性分析・フリーズドライ測定・造粒まで、研究開発を支える装置を取り揃えています。</p>
+      </div>
+      <div class="grid grid--3">
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 選ばれる理由 -->
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Why EastCore</span>
+        <h2>イーストコアが選ばれる理由</h2>
+      </div>
+      <div class="grid grid--3">
+        <div class="reason">
+          <div class="reason__num">01</div>
+          <h3>大手製薬の確かな実績</h3>
+          <p>
+            アステラス製薬、エーザイ、第一三共、武田薬品工業など、国内大手製薬企業の研究開発現場で採用されています。
+          </p>
+        </div>
+        <div class="reason">
+          <div class="reason__num">02</div>
+          <h3>希少なフリーズドライ測定</h3>
+          <p>
+            崩壊温度・共晶溶解温度を測定するフリーズドライ顕微鏡は世界でも数少なく、凍結乾燥プロセス開発の強い味方です。
+          </p>
+        </div>
+        <div class="reason">
+          <div class="reason__num">03</div>
+          <h3>課題に寄り添う提案力</h3>
+          <p>
+            2003年の創業以来、固体表面物性分析の専門メーカーとして、測定対象や目的に応じた装置・手法をご提案します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  /* ヒーロー */
+  .hero {
+    background: linear-gradient(160deg, #f4f8f9 0%, #ecf8f6 60%, #ffffff 100%);
+    padding-block: 88px;
+    overflow: hidden;
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .hero__eyebrow {
+    color: var(--turquoise-deep);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4.4vw, 2.9rem);
+    line-height: 1.35;
+    margin-bottom: 22px;
+  }
+  .hero h1 .hl {
+    color: var(--turquoise-deep);
+    position: relative;
+  }
+  .hero__lead {
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    max-width: 560px;
+    margin-bottom: 30px;
+  }
+  .hero__btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .hero__panel {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--turquoise), var(--turquoise-deep));
+    box-shadow: var(--shadow-lg);
+    display: grid;
+    place-items: center;
+  }
+  .hero__panelmark {
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.05em;
+  }
+  .hero__chip {
+    position: absolute;
+    background: #fff;
+    color: var(--navy);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    white-space: nowrap;
+  }
+  .hero__chip--1 {
+    top: 12%;
+    left: -8%;
+  }
+  .hero__chip--2 {
+    top: 46%;
+    right: -10%;
+  }
+  .hero__chip--3 {
+    bottom: 12%;
+    left: 6%;
+  }
+
+  /* 信頼の帯 */
+  .trust {
+    border-bottom: 1px solid var(--line);
+    padding-block: 32px;
+  }
+  .trust__label {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    margin-bottom: 18px;
+  }
+  .trust__logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .trust__logos li {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.95rem;
+    opacity: 0.75;
+  }
+
+  /* 課題カード */
+  .challenge h3 {
+    font-size: 1.12rem;
+  }
+  .challenge p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+  .challenge__link {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* 理由 */
+  .reason {
+    padding: 8px 4px;
+  }
+  .reason__num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--turquoise);
+    margin-bottom: 8px;
+  }
+  .reason h3 {
+    font-size: 1.1rem;
+  }
+  .reason p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+    .hero__panel {
+      max-width: 360px;
+      margin-inline: auto;
+      width: 100%;
+    }
+    .hero__chip--2 {
+      right: 0;
+    }
+  }
+</style>

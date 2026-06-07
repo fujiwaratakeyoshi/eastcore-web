@@ -1,0 +1,71 @@
+---
+import { emailAddress, company } from "../data/company";
+interface Props {
+  heading?: string;
+  text?: string;
+}
+const {
+  heading = "製品のご相談・デモ・お見積りはお気軽に",
+  text = "測定対象や課題に合わせて、最適な装置・測定方法をご提案します。まずはお問い合わせ、または資料ダウンロードからどうぞ。",
+} = Astro.props;
+---
+
+<section class="cta-band">
+  <div class="container cta-band__inner">
+    <div>
+      <h2>{heading}</h2>
+      <p>{text}</p>
+      <p class="cta-band__meta">
+        お電話: <a href={`tel:${company.tel.replace(/-/g, "")}`}>{company.tel}</a>
+        （{company.businessHours}）／ メール:
+        <a href={`mailto:${emailAddress}`}>{emailAddress}</a>
+      </p>
+    </div>
+    <div class="cta-band__btns">
+      <a href="/contact/" class="btn btn--accent btn--lg">お問い合わせ</a>
+      <a href="/download/" class="btn btn--white btn--lg">資料ダウンロード</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+    color: #fff;
+    padding-block: 64px;
+  }
+  .cta-band__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cta-band h2 {
+    color: #fff;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    margin-bottom: 12px;
+  }
+  .cta-band p {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 8px;
+    max-width: 560px;
+  }
+  .cta-band__meta {
+    font-size: 0.9rem;
+  }
+  .cta-band__meta a {
+    color: var(--turquoise);
+  }
+  .cta-band__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 220px;
+  }
+  @media (max-width: 760px) {
+    .cta-band__btns {
+      width: 100%;
+    }
+  }
+</style>

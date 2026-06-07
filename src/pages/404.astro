@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="ページが見つかりません"
+  description="お探しのページは見つかりませんでした。"
+  noindex={true}
+>
+  <section class="section notfound">
+    <div class="container">
+      <p class="code">404</p>
+      <h1>ページが見つかりませんでした</h1>
+      <p>
+        お探しのページは移動または削除された可能性があります。お手数ですが、トップページまたは製品情報からお探しください。
+      </p>
+      <div class="notfound__btns">
+        <a href="/" class="btn btn--primary">トップへ戻る</a>
+        <a href="/products/" class="btn btn--ghost">製品情報を見る</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    text-align: center;
+    padding-block: 100px;
+  }
+  .code {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--turquoise);
+    margin: 0;
+  }
+  .notfound__btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+</style>

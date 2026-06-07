@@ -1,0 +1,17 @@
+{
+  "name": "eastcore-web",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "株式会社イーストコア コーポレートサイト（Astro）",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.18.2"
+  }
+}

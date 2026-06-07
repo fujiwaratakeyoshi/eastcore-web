@@ -1,0 +1,226 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import { company, emailAddress } from "../data/company";
+import { products } from "../data/products";
+
+const description =
+  "株式会社イーストコアへのお問い合わせ。製品のご相談、デモのご依頼、お見積りなどお気軽にご連絡ください。";
+
+// フォーム送信先（Formspree等のエンドポイントを .env の PUBLIC_FORM_ENDPOINT に設定）
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || "";
+---
+
+<BaseLayout title="お問い合わせ" description={description} noindex={!endpoint}>
+  <Breadcrumb items={[{ label: "お問い合わせ" }]} />
+
+  <section class="section">
+    <div class="container contact">
+      <div class="contact__intro">
+        <span class="eyebrow">Contact</span>
+        <h2>お問い合わせ</h2>
+        <p>
+          製品のご相談・デモのご依頼・お見積りなど、お気軽にお問い合わせください。担当者より折り返しご連絡いたします。
+        </p>
+        <ul class="contact__info">
+          <li>
+            <span>電話</span>
+            <a href={`tel:${company.tel.replace(/-/g, "")}`}>{company.tel}</a>
+            <small>{company.businessHours}</small>
+          </li>
+          <li>
+            <span>メール</span>
+            <a href={`mailto:${emailAddress}`}>{emailAddress}</a>
+          </li>
+          <li>
+            <span>FAX</span>
+            {company.fax}
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact__formwrap">
+        {
+          !endpoint && (
+            <p class="setup-note">
+              ⚠️ フォーム送信先が未設定です。<code>.env</code> に
+              <code>PUBLIC_FORM_ENDPOINT</code>（Formspree等のURL）を設定すると有効になります。
+              設定までは下記メール／電話をご利用ください。
+            </p>
+          )
+        }
+        <form
+          class="form"
+          method="POST"
+          action={endpoint || `mailto:${emailAddress}`}
+        >
+          <!-- スパム対策（人間には非表示） -->
+          <input
+            type="text"
+            name="_gotcha"
+            tabindex="-1"
+            autocomplete="off"
+            class="visually-hidden"
+            aria-hidden="true"
+          />
+          <div class="form__row">
+            <label>会社名・機関名 <span class="req">必須</span>
+              <input type="text" name="company" required />
+            </label>
+            <label>部署名
+              <input type="text" name="department" />
+            </label>
+          </div>
+          <div class="form__row">
+            <label>お名前 <span class="req">必須</span>
+              <input type="text" name="name" required />
+            </label>
+            <label>メールアドレス <span class="req">必須</span>
+              <input type="email" name="email" required />
+            </label>
+          </div>
+          <label>電話番号
+            <input type="tel" name="tel" />
+          </label>
+          <label>ご関心のある製品
+            <select name="product">
+              <option value="">選択してください</option>
+              {products.map((p) => <option value={p.model}>{p.name}</option>)}
+              <option value="その他・未定">その他・未定</option>
+            </select>
+          </label>
+          <label>お問い合わせ内容 <span class="req">必須</span>
+            <textarea name="message" rows="6" required></textarea>
+          </label>
+          <label class="consent">
+            <input type="checkbox" name="consent" required />
+            <a href="/privacy/" target="_blank">プライバシーポリシー</a>に同意します
+          </label>
+          <button type="submit" class="btn btn--primary btn--lg">送信する</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .contact__intro p {
+    color: var(--ink-soft);
+  }
+  .contact__info {
+    list-style: none;
+    padding: 0;
+    margin: 28px 0 0;
+  }
+  .contact__info li {
+    border-top: 1px solid var(--line);
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .contact__info span {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .contact__info a {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .contact__info small {
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+  }
+
+  .setup-note {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+  }
+  .setup-note code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .form {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+  }
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .form label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--navy);
+    margin-bottom: 18px;
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink);
+    background: #fff;
+  }
+  .form input:focus,
+  .form select:focus,
+  .form textarea:focus {
+    outline: 2px solid var(--turquoise);
+    border-color: var(--turquoise);
+  }
+  .req {
+    background: var(--turquoise-deep);
+    color: #fff;
+    font-size: 0.66rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .consent {
+    font-weight: 400 !important;
+    font-size: 0.85rem !important;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+  }
+  .consent input {
+    width: auto;
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+  @media (max-width: 560px) {
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
