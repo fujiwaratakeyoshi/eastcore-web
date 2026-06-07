@@ -1,13 +1,17 @@
 ---
 import { company, nav } from "../data/company";
+import { withBase } from "../lib/url";
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path.startsWith(href);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const isActive = (href: string) => {
+  const target = `${base}${href}`;
+  return href === "/" ? path === `${base}/` || path === base : path.startsWith(target);
+};
 ---
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a href="/" class="brand" aria-label={`${company.name} トップ`}>
+    <a href={withBase("/")} class="brand" aria-label={`${company.name} トップ`}>
       <span class="brand__mark" aria-hidden="true">EC</span>
       <span class="brand__text">
         <strong>EastCore</strong>
@@ -27,7 +31,7 @@ const isActive = (href: string) =>
             .filter((n) => !["/download/", "/contact/"].includes(n.href))
             .map((n) => (
               <li>
-                <a href={n.href} class={isActive(n.href) ? "is-active" : ""}>
+                <a href={withBase(n.href)} class={isActive(n.href) ? "is-active" : ""}>
                   {n.label}
                 </a>
               </li>
@@ -35,8 +39,8 @@ const isActive = (href: string) =>
         }
       </ul>
       <div class="site-nav__cta">
-        <a href="/download/" class="btn btn--ghost">資料ダウンロード</a>
-        <a href="/contact/" class="btn btn--primary">お問い合わせ</a>
+        <a href={withBase("/download/")} class="btn btn--ghost">資料ダウンロード</a>
+        <a href={withBase("/contact/")} class="btn btn--primary">お問い合わせ</a>
       </div>
     </nav>
   </div>

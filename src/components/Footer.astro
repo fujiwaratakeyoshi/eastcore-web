@@ -1,6 +1,7 @@
 ---
 import { company, emailAddress, nav } from "../data/company";
 import { products } from "../data/products";
+import { withBase } from "../lib/url";
 const year = 2026;
 ---
 
@@ -21,9 +22,9 @@ const year = 2026;
       <h3>製品情報</h3>
       <ul>
         {products.map((p) => (
-          <li><a href={`/products/${p.slug}/`}>{p.model}</a></li>
+          <li><a href={withBase(`/products/${p.slug}/`)}>{p.model}</a></li>
         ))}
-        <li><a href="/products/">製品一覧</a></li>
+        <li><a href={withBase("/products/")}>製品一覧</a></li>
       </ul>
     </nav>
 
@@ -31,9 +32,9 @@ const year = 2026;
       <h3>会社情報</h3>
       <ul>
         {nav.map((n) => (
-          <li><a href={n.href}>{n.label}</a></li>
+          <li><a href={withBase(n.href)}>{n.label}</a></li>
         ))}
-        <li><a href="/privacy/">プライバシーポリシー</a></li>
+        <li><a href={withBase("/privacy/")}>プライバシーポリシー</a></li>
       </ul>
     </nav>
 
@@ -42,8 +43,8 @@ const year = 2026;
       <p>製品のご相談・デモ・お見積りはお気軽に。</p>
       <a href={`mailto:${emailAddress}`}>{emailAddress}</a>
       <div class="site-footer__btns">
-        <a href="/contact/" class="btn btn--accent">お問い合わせ</a>
-        <a href="/download/" class="btn btn--white">資料ダウンロード</a>
+        <a href={withBase("/contact/")} class="btn btn--accent">お問い合わせ</a>
+        <a href={withBase("/download/")} class="btn btn--white">資料ダウンロード</a>
       </div>
     </div>
   </div>

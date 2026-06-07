@@ -4,6 +4,7 @@ import ProductCard from "../components/ProductCard.astro";
 import CtaBand from "../components/CtaBand.astro";
 import { company, clients } from "../data/company";
 import { products } from "../data/products";
+import { withBase } from "../lib/url";
 
 const description =
   "株式会社イーストコアは、水蒸気吸着測定装置・フリーズドライ顕微鏡などの科学測定機器メーカー。原薬の吸湿性評価、凍結乾燥の崩壊温度測定、粉体の表面物性分析を、大手製薬企業をはじめとする研究開発現場でサポートします。";
@@ -64,8 +65,8 @@ const challenges = [
           水蒸気吸着測定装置・フリーズドライ顕微鏡をはじめとする科学測定機器のメーカー。原薬の吸湿性評価、凍結乾燥の崩壊温度測定、粉体の表面物性分析まで、研究開発現場の課題解決をサポートします。
         </p>
         <div class="hero__btns">
-          <a href="/products/" class="btn btn--primary btn--lg">製品を見る</a>
-          <a href="/download/" class="btn btn--ghost btn--lg">資料ダウンロード</a>
+          <a href={withBase("/products/")} class="btn btn--primary btn--lg">製品を見る</a>
+          <a href={withBase("/download/")} class="btn btn--ghost btn--lg">資料ダウンロード</a>
         </div>
       </div>
       <div class="hero__panel" aria-hidden="true">
@@ -101,7 +102,7 @@ const challenges = [
             <div class="card challenge">
               <h3>{c.title}</h3>
               <p>{c.body}</p>
-              <a href={c.href} class="challenge__link">
+              <a href={withBase(c.href)} class="challenge__link">
                 {c.link} →
               </a>
             </div>

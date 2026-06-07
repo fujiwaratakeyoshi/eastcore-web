@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumb from "../../components/Breadcrumb.astro";
 import CtaBand from "../../components/CtaBand.astro";
 import { products } from "../../data/products";
+import { withBase } from "../../lib/url";
 
 export function getStaticPaths() {
   return products.map((product) => ({
@@ -58,15 +59,15 @@ const jsonLd = faqJsonLd ? [productJsonLd, faqJsonLd] : [productJsonLd];
           <h1>{product.name}</h1>
           <p class="prod-hero__lead">{product.lead}</p>
           <div class="prod-hero__btns">
-            <a href="/contact/" class="btn btn--primary">この製品について問い合わせる</a>
-            <a href="/download/" class="btn btn--ghost">資料をダウンロード</a>
+            <a href={withBase("/contact/")} class="btn btn--primary">この製品について問い合わせる</a>
+            <a href={withBase("/download/")} class="btn btn--ghost">資料をダウンロード</a>
           </div>
         </div>
         <aside class={`prod-hero__visual ${product.image ? "has-img" : ""}`}>
           {
             product.image ? (
               <img
-                src={product.image}
+                src={withBase(product.image)}
                 alt={product.imageAlt ?? product.name}
                 width="640"
                 height="480"
@@ -149,7 +150,7 @@ const jsonLd = faqJsonLd ? [productJsonLd, faqJsonLd] : [productJsonLd];
         <div class="grid grid--3">
           {
             related.map((p) => (
-              <a href={`/products/${p.slug}/`} class="card relcard">
+              <a href={withBase(`/products/${p.slug}/`)} class="card relcard">
                 <span class="badge">{p.category}</span>
                 <h3>{p.model}</h3>
                 <p>{p.short}</p>

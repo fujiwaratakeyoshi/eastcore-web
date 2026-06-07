@@ -6,17 +6,18 @@ interface Crumb {
 interface Props {
   items: Crumb[];
 }
+import { withBase } from "../lib/url";
 const { items } = Astro.props;
 ---
 
 <nav class="breadcrumb" aria-label="パンくずリスト">
   <div class="container">
-    <a href="/">ホーム</a>
+    <a href={withBase("/")}>ホーム</a>
     {
       items.map((c) => (
         <>
           <span aria-hidden="true"> / </span>
-          {c.href ? <a href={c.href}>{c.label}</a> : <span>{c.label}</span>}
+          {c.href ? <a href={withBase(c.href)}>{c.label}</a> : <span>{c.label}</span>}
         </>
       ))
     }

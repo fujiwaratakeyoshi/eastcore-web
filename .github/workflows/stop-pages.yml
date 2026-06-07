@@ -1,0 +1,22 @@
+name: 即時停止（GitHub Pagesを今すぐ非公開）
+
+# 6時間を待たず、手動で今すぐ公開を停止したいとき用。
+on:
+  workflow_dispatch:
+
+permissions:
+  pages: write
+
+jobs:
+  stop:
+    name: Pagesを停止
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Pagesを停止
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api -X DELETE "repos/$REPO/pages" \
+            && echo "GitHub Pages を停止しました（公開終了）。" \
+            || echo "停止APIが失敗しました。設定 > Pages から手動で無効化してください。"

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/url";
 ---
 
 <BaseLayout
@@ -15,8 +16,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         お探しのページは移動または削除された可能性があります。お手数ですが、トップページまたは製品情報からお探しください。
       </p>
       <div class="notfound__btns">
-        <a href="/" class="btn btn--primary">トップへ戻る</a>
-        <a href="/products/" class="btn btn--ghost">製品情報を見る</a>
+        <a href={withBase("/")} class="btn btn--primary">トップへ戻る</a>
+        <a href={withBase("/products/")} class="btn btn--ghost">製品情報を見る</a>
       </div>
     </div>
   </section>

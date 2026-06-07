@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumb from "../components/Breadcrumb.astro";
 import { company, emailAddress } from "../data/company";
 import { products } from "../data/products";
+import { withBase } from "../lib/url";
 
 const description =
   "株式会社イーストコアへのお問い合わせ。製品のご相談、デモのご依頼、お見積りなどお気軽にご連絡ください。";
@@ -94,7 +95,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT || "";
           </label>
           <label class="consent">
             <input type="checkbox" name="consent" required />
-            <a href="/privacy/" target="_blank">プライバシーポリシー</a>に同意します
+            <a href={withBase("/privacy/")} target="_blank">プライバシーポリシー</a>に同意します
           </label>
           <button type="submit" class="btn btn--primary btn--lg">送信する</button>
         </form>

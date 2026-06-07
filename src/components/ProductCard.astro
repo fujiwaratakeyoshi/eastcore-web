@@ -1,17 +1,18 @@
 ---
 import type { Product } from "../data/products";
+import { withBase } from "../lib/url";
 interface Props {
   product: Product;
 }
 const { product } = Astro.props;
 ---
 
-<a href={`/products/${product.slug}/`} class="product-card card">
+<a href={withBase(`/products/${product.slug}/`)} class="product-card card">
   <div class="product-card__thumb">
     {
       product.image ? (
         <img
-          src={product.image}
+          src={withBase(product.image)}
           alt={product.imageAlt ?? product.name}
           loading="lazy"
           width="400"

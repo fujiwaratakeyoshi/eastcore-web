@@ -1,0 +1,77 @@
+name: 公開（GitHub Pages・約6時間後に自動停止）
+
+# 手動実行で公開する。実行した時点から約6時間後にPagesを自動停止する。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時実行は1つに制限
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ビルド
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Astroビルド（サブパス・noindex）
+        env:
+          SITE: https://fujiwaratakeyoshi.github.io
+          BASE_PATH: /eastcore-web
+          PUBLIC_NOINDEX: "1" # プレビューは検索に出さない
+        run: npm run build
+      - name: Pages設定
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true # Pagesを自動有効化（ビルド方式）
+      - name: 成果物アップロード
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    name: デプロイ
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pagesへデプロイ
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: 公開URL
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: echo "公開URL → $PAGE_URL"
+
+  autostop:
+    name: 約6時間後に自動停止
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # ランナー上限
+    permissions:
+      pages: write
+    steps:
+      - name: 約6時間待機
+        # ランナー6時間上限の手前で停止処理を実行するため5時間55分待機
+        run: sleep 21300
+      - name: GitHub Pagesを停止（公開終了）
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api -X DELETE "repos/$REPO/pages" \
+            && echo "GitHub Pages を停止しました（公開終了）。" \
+            || echo "停止APIが失敗しました。手動でPagesを無効化、またはリポジトリをPrivateに戻してください。"

@@ -1,10 +1,14 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
-// 本番ドメイン（公開時に eastcore.jp へ差し替え予定）
-// サイトマップ・正規URL・OGP生成に使用する
+// site/base は環境変数で上書き可能（既定は本番 eastcore.jp / ルート）。
+// GitHub Pages プレビュー時は Actions が SITE / BASE_PATH を渡す。
+const SITE = process.env.SITE ?? "https://eastcore.jp";
+const BASE_PATH = process.env.BASE_PATH ?? "/";
+
 export default defineConfig({
-  site: "https://eastcore.jp",
+  site: SITE,
+  base: BASE_PATH,
   integrations: [sitemap()],
   build: {
     inlineStylesheets: "auto",

@@ -1,5 +1,6 @@
 ---
 import { emailAddress, company } from "../data/company";
+import { withBase } from "../lib/url";
 interface Props {
   heading?: string;
   text?: string;
@@ -22,8 +23,8 @@ const {
       </p>
     </div>
     <div class="cta-band__btns">
-      <a href="/contact/" class="btn btn--accent btn--lg">お問い合わせ</a>
-      <a href="/download/" class="btn btn--white btn--lg">資料ダウンロード</a>
+      <a href={withBase("/contact/")} class="btn btn--accent btn--lg">お問い合わせ</a>
+      <a href={withBase("/download/")} class="btn btn--white btn--lg">資料ダウンロード</a>
     </div>
   </div>
 </section>
