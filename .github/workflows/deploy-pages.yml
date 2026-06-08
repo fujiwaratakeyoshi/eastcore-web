@@ -32,9 +32,8 @@ jobs:
           PUBLIC_NOINDEX: "1" # プレビューは検索に出さない
         run: npm run build
       - name: Pages設定
+        # ※事前に Settings > Pages > Source を "GitHub Actions" に設定しておくこと
         uses: actions/configure-pages@v5
-        with:
-          enablement: true # Pagesを自動有効化（ビルド方式）
       - name: 成果物アップロード
         uses: actions/upload-pages-artifact@v3
         with:
