@@ -1,6 +1,6 @@
-name: 公開（GitHub Pages・約6時間後に自動停止）
+name: 公開（GitHub Pages・常時公開）
 
-# 手動実行で公開する。実行した時点から約6時間後にPagesを自動停止する。
+# 手動実行で公開する。停止したい時は stop-pages.yml を実行する。
 on:
   workflow_dispatch:
 
@@ -54,23 +54,3 @@ jobs:
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: echo "公開URL → $PAGE_URL"
-
-  autostop:
-    name: 約6時間後に自動停止
-    needs: deploy
-    runs-on: ubuntu-latest
-    timeout-minutes: 360 # ランナー上限
-    permissions:
-      pages: write
-    steps:
-      - name: 約6時間待機
-        # ランナー6時間上限の手前で停止処理を実行するため5時間55分待機
-        run: sleep 21300
-      - name: GitHub Pagesを停止（公開終了）
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-        run: |
-          gh api -X DELETE "repos/$REPO/pages" \
-            && echo "GitHub Pages を停止しました（公開終了）。" \
-            || echo "停止APIが失敗しました。手動でPagesを無効化、またはリポジトリをPrivateに戻してください。"

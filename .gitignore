@@ -23,3 +23,7 @@ npm-debug.log*
 # editor
 .vscode/
 .idea/
+
+# 実メールアドレス入りのため非公開（send.php.example を見本として公開）
+public/send.php
+エックスサーバー移行手順.md

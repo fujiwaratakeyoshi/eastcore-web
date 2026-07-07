@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { company } from "../data/company";
+import { withBase } from "../lib/url";
+---
+
+<BaseLayout
+  title="送信完了"
+  description="お問い合わせ・資料請求を受け付けました。"
+  noindex={true}
+>
+  <section class="section">
+    <div class="container thanks">
+      <span class="eyebrow">Thank you</span>
+      <h2>送信が完了しました</h2>
+      <p>
+        お問い合わせ・資料請求を受け付けました。担当者より折り返しご連絡いたします。<br
+        />お急ぎの場合は、お電話（<a href={`tel:${company.tel.replace(/-/g, "")}`}
+          >{company.tel}</a
+        >）にてお問い合わせください。
+      </p>
+      <a href={withBase("/")} class="btn btn--primary btn--lg"
+        >トップページへ戻る</a
+      >
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks {
+    text-align: center;
+    max-width: 640px;
+    padding-top: 20px;
+    padding-bottom: 48px;
+  }
+  .thanks p {
+    color: var(--ink-soft);
+    margin: 20px 0 32px;
+    line-height: 1.9;
+  }
+  .thanks a {
+    color: var(--turquoise-deep);
+    font-weight: 700;
+  }
+  .thanks .btn {
+    color: #fff;
+  }
+</style>

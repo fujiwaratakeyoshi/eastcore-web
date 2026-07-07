@@ -12,8 +12,9 @@ export const company = {
   tel: "03-3444-9828",
   fax: "03-3441-2639",
   // メールはスパム対策のため分割して保持し、表示時に結合する
-  emailUser: "info",
-  emailDomain: "eastcore.jp",
+  // 実アドレスはリポジトリに載せず、ビルド時に .env の PUBLIC_EMAIL_USER / PUBLIC_EMAIL_DOMAIN で注入する
+  emailUser: import.meta.env.PUBLIC_EMAIL_USER ?? "info",
+  emailDomain: import.meta.env.PUBLIC_EMAIL_DOMAIN ?? "example.com",
   businessHours: "平日 10:00〜17:00（土日祝休み）",
   business:
     "水蒸気吸着測定装置、フリーズドライ顕微鏡ステージ、インバースガスクロマトグラフィー、小型造粒装置、温湿度コントロール顕微鏡ステージの販売",
